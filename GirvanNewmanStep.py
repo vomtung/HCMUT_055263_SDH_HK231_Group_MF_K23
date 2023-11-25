@@ -17,7 +17,7 @@ def girvan_newman_step(graph, pos, ax):
 
     # Draw the updated graph
     ax.clear()
-    nx.draw(graph, pos, with_labels=True, font_weight='bold', node_size=700, node_color='skyblue', font_color='black', font_size=10)
+    nx.draw(G, pos, with_labels=True, font_weight='bold', node_size=700, node_color='skyblue', font_color='black', font_size=10)
     plt.draw()
 
 def on_button_click(event):
