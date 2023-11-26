@@ -56,7 +56,7 @@ button.on_clicked(show_next_community)
 
 
 p = ExcelService()
-p.readCourseCSV();
+p.readRegistrationInfoToGraph()
 
 # Hiển thị đồ thị với cộng đồng ban đầu
 draw_graph_with_community()
