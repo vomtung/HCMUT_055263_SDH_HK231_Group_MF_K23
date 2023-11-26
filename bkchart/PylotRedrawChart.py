@@ -2,6 +2,7 @@ import matplotlib.pyplot as plt
 from matplotlib.widgets import Button
 import numpy as np
 
+excel_file_path = 'path/to/your/file.xlsx'
 # Create some sample data
 x = np.linspace(0, 10, 100)
 y = np.sin(x)
