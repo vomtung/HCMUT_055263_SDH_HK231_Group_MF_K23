@@ -3,8 +3,9 @@ import networkx as nx
 from matplotlib.widgets import Button
 
 # Tạo đồ thị mẫu
-G = nx.Graph()
-G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
+#G = nx.Graph()
+#G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
+G = nx.karate_club_graph()
 
 # Tính toán cộng đồng sử dụng Girvan-Newman
 comp = nx.community.girvan_newman(G)
@@ -43,7 +44,7 @@ fig, ax = plt.subplots()
 #plt.subplots_adjust(bottom=0.2)  # Để tránh nút bị che khuất
 
 # Tạo nút bấm để hiển thị bước tiếp theo
-button_ax = plt.axes([0.81, 0.01, 0.1, 0.05])  # Vị trí và kích thước của nút
+button_ax = plt.axes([0.81, 0.01, 0.1, 0.05])
 button = Button(button_ax, 'Next Step')  # Tạo nút với nhãn 'Next Step'
 
 
