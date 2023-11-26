@@ -2,6 +2,8 @@ import matplotlib.pyplot as plt
 import networkx as nx
 from matplotlib.widgets import Button
 
+from Service.ExcelService import ExcelService
+
 # Tạo đồ thị mẫu
 #G = nx.Graph()
 #G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
@@ -51,6 +53,10 @@ button = Button(button_ax, 'Next Step')  # Tạo nút với nhãn 'Next Step'
 
 # Gán sự kiện cho nút bấm
 button.on_clicked(show_next_community)
+
+
+p = ExcelService()
+p.readCourseCSV();
 
 # Hiển thị đồ thị với cộng đồng ban đầu
 draw_graph_with_community()
