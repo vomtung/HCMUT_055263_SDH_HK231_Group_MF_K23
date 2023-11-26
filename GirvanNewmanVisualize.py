@@ -9,8 +9,8 @@ p = ExcelService()
 # Tạo đồ thị mẫu
 #G = nx.Graph()
 #G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
-#G = nx.karate_club_graph()
-G = p.readRegistrationInfoToGraph()
+G = nx.karate_club_graph()
+#G = p.readRegistrationInfoToGraph()
 
 # Tính toán cộng đồng sử dụng Girvan-Newman
 comp = nx.community.girvan_newman(G)
