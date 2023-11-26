@@ -4,10 +4,13 @@ from matplotlib.widgets import Button
 
 from Service.ExcelService import ExcelService
 
+p = ExcelService()
+
 # Tạo đồ thị mẫu
 #G = nx.Graph()
 #G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
-G = nx.karate_club_graph()
+#G = nx.karate_club_graph()
+G = p.readRegistrationInfoToGraph()
 
 # Tính toán cộng đồng sử dụng Girvan-Newman
 comp = nx.community.girvan_newman(G)
@@ -55,8 +58,7 @@ button = Button(button_ax, 'Next Step')  # Tạo nút với nhãn 'Next Step'
 button.on_clicked(show_next_community)
 
 
-p = ExcelService()
-p.readRegistrationInfoToGraph()
+
 
 # Hiển thị đồ thị với cộng đồng ban đầu
 draw_graph_with_community()
