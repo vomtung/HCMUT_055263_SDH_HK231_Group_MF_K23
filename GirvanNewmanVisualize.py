@@ -9,7 +9,7 @@ import time
 
 from networkx.algorithms.community import girvan_newman
 
-MAX_STEP =10
+RUN_STEP =10
 
 # Read the Excel file into a DataFrame
 df = pd.read_csv('dataset/studentInfo-50.csv')
@@ -40,17 +40,19 @@ print("==Finished build graph. Begin run girvan_newman")
 comp = girvan_newman(G)
 
 print("==Finished run girvan_newman", )
+draw_community_step = 0
 communitiesList = []
 for communities_at_step in comp:
-    print("== process communities_at_step", len(communitiesList), f", max_step: {MAX_STEP}")
-    communitiesList.append(tuple(sorted(c) for c in communities_at_step))
-    if len(communitiesList) >= MAX_STEP:
+    print("== process communities_at_step", draw_community_step, f", RUN_STEP: {RUN_STEP}")
+    if draw_community_step == RUN_STEP:
+        communitiesList.append(tuple(sorted(c) for c in communities_at_step))
         break
+    draw_community_step = draw_community_step + 1
 
 # Get the first set of communities
-draw_community_step = 8
-print( f" draw_community_step{draw_community_step}")
-communities = communitiesList [draw_community_step]
+
+print( f" draw_community_step{RUN_STEP}")
+communities = communitiesList [0]
 print(f"==length of community {len(communitiesList)}")
 
 # Create a mapping of nodes to their community index
