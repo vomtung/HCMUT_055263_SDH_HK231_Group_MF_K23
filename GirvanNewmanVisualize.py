@@ -11,14 +11,15 @@ import time
 
 from networkx.algorithms.community import girvan_newman
 
-RUN_STEP =4
+RUN_STEP =6
 
 # Read the Excel file into a DataFrame
 #df = pd.read_csv('dataset/studentInfo.csv')
+df = pd.read_csv('dataset/studentInfo_20.csv')
 #df = pd.read_csv('dataset/studentInfo_50.csv')
 #df = pd.read_csv('dataset/studentInfo_80.csv')
 #df = pd.read_csv('dataset/studentInfo_100.csv')
-df = pd.read_csv('dataset/studentInfo_300.csv')
+#df = pd.read_csv('dataset/studentInfo_300.csv')
 #df = pd.read_csv('dataset/studentInfo_500.csv')
 #df = pd.read_csv('dataset/studentInfo_1000.csv')
 
@@ -35,9 +36,11 @@ for index, row in df.iterrows():
         #print(f"Row[{index}] :", row['code_module'])
         #print(f"Row[{index}] ")
         if ((row['code_module'] == row2['code_module'])
-                and (row['id_student'] != row2['id_student'])):
+                and (row['id_student'] != row2['id_student'])
+                and (G.has_edge(row['id_student'], row2['id_student']) == False)):
             #print(f"id_student:{row['id_student']}", f"id_student2:{row2['id_student']}")
             G.add_edge(row['id_student'], row2['id_student'])
+
 
 
 
@@ -77,5 +80,5 @@ for  i, com1 in enumerate(communitiesList):
 
 # Draw the graph, coloring nodes based on communities
 pos = nx.spring_layout(G, k=1)
-nx.draw(G, pos, node_color=[node_colors[node] for node in G.nodes()], with_labels=False, cmap=plt.cm.jet)
+nx.draw(G, pos, node_color=[node_colors[node] for node in G.nodes()], with_labels=True, cmap=plt.cm.jet)
 plt.show()
