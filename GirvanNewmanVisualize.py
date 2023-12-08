@@ -9,7 +9,7 @@ import time
 
 from networkx.algorithms.community import girvan_newman
 
-RUN_STEP =10
+RUN_STEP =28
 
 # Read the Excel file into a DataFrame
 df = pd.read_csv('dataset/studentInfo-50.csv')
@@ -62,6 +62,6 @@ node_community = {node: idx for idx, comm in enumerate(communities) for node in 
 node_colors = [node_community[node] for node in G.nodes()]
 
 # Draw the graph, coloring nodes based on communities
-pos = nx.spring_layout(G)
-nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.jet)
+pos = nx.spring_layout(G, k=1)
+nx.draw(G, pos, node_color=node_colors, with_labels=False, cmap=plt.cm.jet)
 plt.show()
