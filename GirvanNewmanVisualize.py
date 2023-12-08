@@ -1,3 +1,5 @@
+import random
+
 import pandas as pd
 import csv
 import os
@@ -9,16 +11,21 @@ import time
 
 from networkx.algorithms.community import girvan_newman
 
-RUN_STEP =28
+RUN_STEP =4
 
 # Read the Excel file into a DataFrame
-df = pd.read_csv('dataset/studentInfo-50.csv')
+#df = pd.read_csv('dataset/studentInfo.csv')
+#df = pd.read_csv('dataset/studentInfo_50.csv')
+#df = pd.read_csv('dataset/studentInfo_80.csv')
+#df = pd.read_csv('dataset/studentInfo_100.csv')
+df = pd.read_csv('dataset/studentInfo_300.csv')
+#df = pd.read_csv('dataset/studentInfo_500.csv')
+#df = pd.read_csv('dataset/studentInfo_1000.csv')
 
-
-
-#print(df)
+print("==Begin build graph>>")
 
 G = nx.Graph()
+#G = nx.karate_club_graph()
 # Display the contents of the DataFrame
 #print(df.columns)
 for index, row in df.iterrows():
@@ -35,33 +42,40 @@ for index, row in df.iterrows():
 
 
 #nx.draw(G, with_labels=True, font_weight='bold')
-print("==Finished build graph. Begin run girvan_newman")
+print("==>Finished build graph>>")
+print("==>Begin run girvan_newman>>")
+
 # Apply Girvan-Newman algorithm to detect communities
 comp = girvan_newman(G)
 
-print("==Finished run girvan_newman", )
+print("==>Finished run girvan_newman")
 draw_community_step = 0
 communitiesList = []
+
 for communities_at_step in comp:
-    print("== process communities_at_step", draw_community_step, f", RUN_STEP: {RUN_STEP}")
     if draw_community_step == RUN_STEP:
-        communitiesList.append(tuple(sorted(c) for c in communities_at_step))
+        communitiesList.append(tuple(c for c in communities_at_step))
         break
+    print("==> process communities_at_step", draw_community_step, f", RUN_STEP: {RUN_STEP}")
+
     draw_community_step = draw_community_step + 1
 
 # Get the first set of communities
 
-print( f" draw_community_step{RUN_STEP}")
-communities = communitiesList [0]
-print(f"==length of community {len(communitiesList)}")
+print( f" ==>draw_community_step{RUN_STEP}")
+print(f"==>length of community {len(communitiesList[0])}")
 
 # Create a mapping of nodes to their community index
-node_community = {node: idx for idx, comm in enumerate(communities) for node in comm}
+community_colors = ["#{:06x}".format(random.randint(0, 0xFFFFFF)) for _ in range(10000)]
 
-# Generate colors for nodes based on communities
-node_colors = [node_community[node] for node in G.nodes()]
+default_color = 'black'
+node_colors = {node: default_color for node in G.nodes()}
+for  i, com1 in enumerate(communitiesList):
+    for idx, com1 in enumerate(com1):
+        for  node in com1:
+            node_colors[node] = community_colors[idx]
 
 # Draw the graph, coloring nodes based on communities
 pos = nx.spring_layout(G, k=1)
-nx.draw(G, pos, node_color=node_colors, with_labels=False, cmap=plt.cm.jet)
+nx.draw(G, pos, node_color=[node_colors[node] for node in G.nodes()], with_labels=False, cmap=plt.cm.jet)
 plt.show()
