@@ -1,64 +1,65 @@
-import matplotlib.pyplot as plt
+import pandas as pd
+import csv
+import os
+import tkinter as tk
+from tkinter import filedialog
 import networkx as nx
-from matplotlib.widgets import Button
+import matplotlib.pyplot as plt
+import time
 
-from Service.ExcelService import ExcelService
+from networkx.algorithms.community import girvan_newman
 
-p = ExcelService()
+MAX_STEP =10
 
-# Tạo đồ thị mẫu
-#G = nx.Graph()
-#G.add_edges_from([(1, 2), (1, 3), (2, 3), (3, 4), (3, 5), (4, 5), (4, 6), (5, 6), (6, 7)])
-G = nx.karate_club_graph()
-#G = p.readRegistrationInfoToGraph()
+# Read the Excel file into a DataFrame
+df = pd.read_csv('dataset/studentInfo-50.csv')
 
-# Tính toán cộng đồng sử dụng Girvan-Newman
-comp = nx.community.girvan_newman(G)
-communities = []
+
+
+#print(df)
+
+G = nx.Graph()
+# Display the contents of the DataFrame
+#print(df.columns)
+for index, row in df.iterrows():
+    for index2, row2 in df.iterrows():
+        # Access row data using column names or indices
+        #print(f"Row[{index}] :", row.values)
+        #print(f"Row[{index}] :", row['code_module'])
+        #print(f"Row[{index}] ")
+        if ((row['code_module'] == row2['code_module'])
+                and (row['id_student'] != row2['id_student'])):
+            #print(f"id_student:{row['id_student']}", f"id_student2:{row2['id_student']}")
+            G.add_edge(row['id_student'], row2['id_student'])
+
+
+
+#nx.draw(G, with_labels=True, font_weight='bold')
+print("==Finished build graph. Begin run girvan_newman")
+# Apply Girvan-Newman algorithm to detect communities
+comp = girvan_newman(G)
+
+print("==Finished run girvan_newman", )
+communitiesList = []
 for communities_at_step in comp:
-    communities.append(tuple(sorted(c) for c in communities_at_step))
+    print("== process communities_at_step", len(communitiesList), f", max_step: {MAX_STEP}")
+    communitiesList.append(tuple(sorted(c) for c in communities_at_step))
+    if len(communitiesList) >= MAX_STEP:
+        break
 
-# Khởi tạo biến để lưu trạng thái hiện tại của cộng đồng
-current_step = 0
-node_groups = communities[current_step]
+# Get the first set of communities
+draw_community_step = 8
+print( f" draw_community_step{draw_community_step}")
+communities = communitiesList [draw_community_step]
+print(f"==length of community {len(communitiesList)}")
 
-# Hàm vẽ đồ thị và cộng đồng tương ứng
-def draw_graph_with_community():
-    colors = [0] * len(G.nodes())
-    for i, group in enumerate(node_groups):
-        for node in group:
-            colors[node - 1] = i + 1
+# Create a mapping of nodes to their community index
+node_community = {node: idx for idx, comm in enumerate(communities) for node in comm}
 
-    plt.clf()
-    nx.draw(G, node_color=colors, with_labels=True)
-    plt.show()
+# Generate colors for nodes based on communities
+node_colors = [node_community[node] for node in G.nodes()]
 
-# Hàm xử lý sự kiện khi nút được nhấn để hiển thị bước tiếp theo
-def show_next_community(event):
-    global current_step, node_groups
-    if current_step < len(communities) - 1:
-        current_step += 1
-        node_groups = communities[current_step]
-        print("Communities:", node_groups)
-        draw_graph_with_community()
-    else:
-        print("current_step:" + str(current_step) +" len(communities):" + str(len(communities)))
-
-# Tạo figure và trục
-fig, ax = plt.subplots()
-#plt.subplots_adjust(bottom=0.2)  # Để tránh nút bị che khuất
-
-# Tạo nút bấm để hiển thị bước tiếp theo
-button_ax = plt.axes([0.81, 0.01, 0.1, 0.05])
-button = Button(button_ax, 'Next Step')  # Tạo nút với nhãn 'Next Step'
-
-
-
-# Gán sự kiện cho nút bấm
-button.on_clicked(show_next_community)
-
-
-
-
-# Hiển thị đồ thị với cộng đồng ban đầu
-draw_graph_with_community()
+# Draw the graph, coloring nodes based on communities
+pos = nx.spring_layout(G)
+nx.draw(G, pos, node_color=node_colors, with_labels=True, cmap=plt.cm.jet)
+plt.show()
