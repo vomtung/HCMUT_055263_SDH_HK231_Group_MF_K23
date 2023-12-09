@@ -11,14 +11,14 @@ import time
 
 from networkx.algorithms.community import girvan_newman
 
-RUN_STEP =6
+RUN_STEP =1
 
 # Read the Excel file into a DataFrame
 #df = pd.read_csv('dataset/studentInfo.csv')
-df = pd.read_csv('dataset/studentInfo_20.csv')
+#df = pd.read_csv('dataset/studentInfo_20.csv')
 #df = pd.read_csv('dataset/studentInfo_50.csv')
 #df = pd.read_csv('dataset/studentInfo_80.csv')
-#df = pd.read_csv('dataset/studentInfo_100.csv')
+df = pd.read_csv('dataset/studentInfo_100.csv')
 #df = pd.read_csv('dataset/studentInfo_300.csv')
 #df = pd.read_csv('dataset/studentInfo_500.csv')
 #df = pd.read_csv('dataset/studentInfo_1000.csv')
