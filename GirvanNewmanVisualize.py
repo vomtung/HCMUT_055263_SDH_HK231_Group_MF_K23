@@ -65,13 +65,13 @@ for communities_at_step in comp:
     if draw_community_step == RUN_STEP:
         communitiesList.append(tuple(c for c in communities_at_step))
         break
-    print("==> process communities_at_step", draw_community_step, f", RUN_STEP: {RUN_STEP}")
+    print("==> process communities_at_step: ", draw_community_step, f", RUN_STEP: {RUN_STEP}")
 
     draw_community_step = draw_community_step + 1
 
 # Get the first set of communities
 
-print( f" ==>draw_community_step{RUN_STEP}")
+print( f" ==>draw_community_step: {RUN_STEP}")
 print(f"==>length of community {len(communitiesList[0])}")
 
 # Create a mapping of nodes to their community index
